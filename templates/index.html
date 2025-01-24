@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Face Emotion Recognition</title>
+</head>
+<body>
+    <h1>Live Face Emotion Recognition</h1>
+    <div id="video-container">
+        <img id="video" src="{{ url_for('video_feed') }}" alt="Live Video Feed">
+    </div>
+    <h2>Detected Emotion: <span id="emotion">None</span></h2>
+    <h3>Confidence: <span id="confidence">N/A</span></h3>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        // Connect to the Flask-SocketIO server
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Listen for the 'emotion' event sent from the server
+        socket.on('emotion', function(data) {
+            document.getElementById('emotion').innerText = data.emotion;
+            document.getElementById('confidence').innerText = data.score.toFixed(2);
+        });
+    </script>
+</body>
+</html>
